@@ -1,0 +1,27 @@
+{
+    "name": "sbriones/resort",
+    "description": "This project has been switched from a practise I did in at my university (University of Almería) in the Methodology of programming subject.",
+    "type": "project",
+    "require": {
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4" : {
+            "Resort\\" : "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4" : {
+            "Tests\\" : "tests/"
+        }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Salvador Briones",
+            "email": "mexidense@gmail.com"
+        }
+    ]
+}
