@@ -133,7 +133,7 @@ final class ResortTestA extends TestCase
         $this->assertEquals(57, $this->residentFour->age($date));
     }
 
-    public function testChecInResort(): void
+    public function testCheckInResort(): void
     {
         $this->resort->checkIn(
             $this->residentOne,
