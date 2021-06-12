@@ -172,7 +172,8 @@ final class ResortTest extends TestCase
         $this->assertEquals(0, $this->resort->numberOfBookings());
         for ($i = 0; $i < 100; $i++) {
             $dynamicResident = new Resident(
-                'fullname' . $i,
+                'fullName' . $i,
+                '272727' . $i,
                 'M',
                 DateTimeImmutable::createFromFormat($this->dateFormat, '12-02-1950')
             );
