@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Tests;
 
 use DateTimeImmutable;
+use Domain\Resident;
+use Domain\Resort;
+use Domain\Room;
 use PHPUnit\Framework\TestCase;
 
 final class ResortTest extends TestCase
