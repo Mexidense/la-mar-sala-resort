@@ -39,7 +39,7 @@ final class ResortTest extends TestCase
         $this->roomEight = new Room('302');
         $this->roomNine = new Room('303');
 
-        $this->dateFormat = 'dd-MM-yyyy';
+        $this->dateFormat = 'd-m-Y';
 
         $this->residentOne = new Resident(
             'Martinez Gomez, Adrian',
