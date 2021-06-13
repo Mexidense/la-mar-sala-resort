@@ -150,8 +150,7 @@ final class Resort
     ): void {
         foreach ($this->bookings as $bookingIndex => $booking) {
             if ($residentOut->equals($booking->resident())) {
-                $changedBooking = $booking->changeCheckOutDate($newCheckOutDate);
-                $this->bookings[$bookingIndex] = $changedBooking;
+                $this->bookings[$bookingIndex] = $booking->changeCheckOutDate($newCheckOutDate);
                 break;
             }
         }
