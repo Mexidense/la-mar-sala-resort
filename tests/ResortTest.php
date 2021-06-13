@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Tests;
 
 use DateTimeImmutable;
+use Domain\Models\Resident;
+use Domain\Models\Resort;
+use Domain\Models\Room;
 use PHPUnit\Framework\TestCase;
 
 final class ResortTest extends TestCase
@@ -39,7 +42,7 @@ final class ResortTest extends TestCase
         $this->roomEight = new Room('302');
         $this->roomNine = new Room('303');
 
-        $this->dateFormat = 'dd-MM-yyyy';
+        $this->dateFormat = 'd-m-Y';
 
         $this->residentOne = new Resident(
             'Martinez Gomez, Adrian',
@@ -136,29 +139,29 @@ final class ResortTest extends TestCase
     public function testCheckInResort(): void
     {
         $this->resort->checkIn(
-            $this->residentOne,
             DateTimeImmutable::createFromFormat($this->dateFormat, '12-01-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '12-06-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '12-06-2007'),
+            $this->residentOne
         );
         $this->resort->checkIn(
-            $this->residentTwo,
             DateTimeImmutable::createFromFormat($this->dateFormat, '12-02-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '12-06-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '12-06-2007'),
+            $this->residentTwo
         );
         $this->assertEquals(2, $this->resort->numberOfBookings());
         $this->assertEquals(2, $this->resort->numberOfResidents());
 
         $this->resort->checkIn(
-            $this->residentThree,
             DateTimeImmutable::createFromFormat($this->dateFormat, '12-02-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '12-03-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '12-03-2007'),
+            $this->residentThree
         );
         $this->assertEquals(3, $this->resort->numberOfBookings());
         $this->assertEquals(3, $this->resort->numberOfResidents());
 
         $this->resort->checkOut(
-            $this->residentOne,
-            DateTimeImmutable::createFromFormat($this->dateFormat, '12-05-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '12-05-2007'),
+            $this->residentOne
         );
         $this->assertEquals(3, $this->resort->numberOfBookings());
         $this->assertEquals(2, $this->resort->numberOfResidents());
@@ -169,53 +172,54 @@ final class ResortTest extends TestCase
         $this->assertEquals(0, $this->resort->numberOfBookings());
         for ($i = 0; $i < 100; $i++) {
             $dynamicResident = new Resident(
-                'fullname' . $i,
+                'fullName' . $i,
+                '272727' . $i,
                 'M',
                 DateTimeImmutable::createFromFormat($this->dateFormat, '12-02-1950')
             );
             $dynamicRoom = new Room('100' . $i);
-            $this->resort->checkOut(
-                $dynamicResident,
-                $dynamicRoom,
+            $this->resort->checkIn(
                 DateTimeImmutable::createFromFormat($this->dateFormat, '12-02-2007'),
-                DateTimeImmutable::createFromFormat($this->dateFormat, '12-02-2008')
+                DateTimeImmutable::createFromFormat($this->dateFormat, '12-02-2008'),
+                $dynamicResident,
+                $dynamicRoom
             );
-
-            $this->assertEquals(100, $this->resort->getNumberOfBookings());
         }
+
+        $this->assertEquals(100, $this->resort->numberOfBookings());
     }
 
     public function testChangeRoom(): void
     {
         $this->resort->checkIn(
-            $this->residentOne,
-            $this->roomOne,
             DateTimeImmutable::createFromFormat($this->dateFormat, '12-01-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '12-03-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '12-03-2007'),
+            $this->residentOne,
+            $this->roomOne
         );
         $this->resort->checkIn(
-            $this->residentTwo,
-            $this->roomTwo,
             DateTimeImmutable::createFromFormat($this->dateFormat, '12-02-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '12-03-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '12-03-2007'),
+            $this->residentTwo,
+            $this->roomTwo
         );
         $this->assertEquals(2, $this->resort->numberOfBookings());
         $this->assertEquals(2, $this->resort->numberOfResidents());
 
         $this->resort->checkIn(
-            $this->residentThree,
-            $this->roomThree,
             DateTimeImmutable::createFromFormat($this->dateFormat, '12-02-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '12-03-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '12-03-2007'),
+            $this->residentThree,
+            $this->roomThree
         );
         $this->assertEquals(3, $this->resort->numberOfBookings());
         $this->assertEquals(3, $this->resort->numberOfResidents());
 
         $this->resort->changeRoom(
-            $this->residentOne,
-            $this->roomFour,
             DateTimeImmutable::createFromFormat($this->dateFormat, '12-02-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '12-03-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '12-03-2007'),
+            $this->residentOne,
+            $this->roomFour
         );
         $this->assertEquals(4, $this->resort->numberOfBookings());
         $this->assertEquals(3, $this->resort->numberOfResidents());
@@ -226,7 +230,7 @@ final class ResortTest extends TestCase
         /** @var Room[] $rooms */
         $rooms = $this->resort->rooms();
         $this->assertEquals(5, $this->resort->numberOfRooms());
-        $this->assertTrue($rooms[0]->equals($this->residentOne));
+        $this->assertTrue($rooms[0]->equals($this->roomOne));
 
         $this->assertEquals(
             $this->resort->findRoomByNumber($this->roomOne->number())->number(),
@@ -268,69 +272,70 @@ final class ResortTest extends TestCase
     public function testEqualsResidents(): void
     {
         $this->resort->checkIn(
-            $this->residentOne,
-            $this->roomOne,
             DateTimeImmutable::createFromFormat($this->dateFormat, '01-01-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-01-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-01-2007'),
+            $this->residentOne,
+            $this->roomOne
         );
         $this->resort->checkIn(
-            $this->residentTwo,
-            $this->roomTwo,
             DateTimeImmutable::createFromFormat($this->dateFormat, '01-02-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2007'),
+            $this->residentTwo,
+            $this->roomTwo
         );
         $this->assertEquals(2, $this->resort->numberOfResidents());
 
         $this->resort->checkIn(
-            $this->residentTwo,
-            $this->roomThree,
             DateTimeImmutable::createFromFormat($this->dateFormat, '01-02-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2007'),
+            $this->residentTwo,
+            $this->roomThree
         );
         $this->assertEquals(2, $this->resort->numberOfResidents());
     }
 
+ 
     public function testAutoIncrementBookings(): void
     {
         $this->resort->checkIn(
-            $this->residentOne,
-            $this->roomOne,
             DateTimeImmutable::createFromFormat($this->dateFormat, '12-01-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '12-01-2008')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '12-01-2008'),
+            $this->residentOne,
+            $this->roomOne
         );
         $this->resort->checkIn(
+            DateTimeImmutable::createFromFormat($this->dateFormat, '12-02-2007'),
+            DateTimeImmutable::createFromFormat($this->dateFormat, '12-01-2008'),
             $this->residentTwo,
-            $this->roomTwo,
-            DateTimeImmutable::createFromFormat($this->dateFormat, '12-02-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '12-01-2008')
+            $this->roomTwo
         );
         $this->resort->checkIn(
-            $this->residentThree,
-            $this->roomThree,
             DateTimeImmutable::createFromFormat($this->dateFormat, '12-02-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '12-01-2008')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '12-01-2008'),
+            $this->residentThree,
+            $this->roomThree
         );
         $this->assertEquals(3, $this->resort->numberOfBookings());
         $this->assertEquals(3, $this->resort->numberOfResidents());
 
         /** Booking[] $bookings */
         $bookings = $this->resort->bookings();
-        $lastIdentifiedBookingNumber = Booking::lastIdentity();
+        $lastIdentifiedBookingNumber = $this->resort->lastIdentity();
 
-        for ($i = 0; $i < $this->resort->numberOfBooking(); $i++) {
+        for ($i = 0; $i < $this->resort->numberOfBookings(); $i++) {
             $this->assertTrue(
                 $bookings[$i]->number() === $lastIdentifiedBookingNumber - (2 - $i)
             );
         }
 
         $this->resort->checkOut(
-            $this->residentOne,
-            DateTimeImmutable::createFromFormat($this->dateFormat, '12-05-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '12-05-2007'),
+            $this->residentOne
         );
         $this->assertEquals(3, $this->resort->numberOfBookings());
         $this->assertEquals(2, $this->resort->numberOfResidents());
 
-        for ($i = 0; $i < $this->resort->numberOfBooking(); $i++) {
+        for ($i = 0; $i < $this->resort->numberOfBookings(); $i++) {
             $this->assertTrue(
                 $bookings[$i]->number() === $lastIdentifiedBookingNumber - (2 - $i)
             );
@@ -340,34 +345,34 @@ final class ResortTest extends TestCase
     public function testBookingDateControl(): void
     {
         $this->resort->checkIn(
-            $this->residentOne,
-            $this->roomOne,
             DateTimeImmutable::createFromFormat($this->dateFormat, '01-01-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-01-2008')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-01-2007'),
+            $this->residentOne,
+            $this->roomOne
         );
         $this->resort->checkIn(
-            $this->residentTwo,
-            $this->roomTwo,
             DateTimeImmutable::createFromFormat($this->dateFormat, '01-02-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2008')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2007'),
+            $this->residentTwo,
+            $this->roomTwo
         );
         $this->assertEquals(2, $this->resort->numberOfBookings());
         $this->assertEquals(2, $this->resort->numberOfResidents());
 
         $this->resort->checkIn(
-            $this->residentThree,
-            $this->roomThree,
             DateTimeImmutable::createFromFormat($this->dateFormat, '01-03-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2008')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2007'),
+            $this->residentThree,
+            $this->roomThree
         );
         $this->assertEquals(2, $this->resort->numberOfBookings());
         $this->assertEquals(2, $this->resort->numberOfResidents());
 
         $this->resort->checkIn(
-            $this->residentThree,
-            $this->roomThree,
             DateTimeImmutable::createFromFormat($this->dateFormat, '01-03-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '01-03-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '01-03-2007'),
+            $this->residentThree,
+            $this->roomThree
         );
         $this->assertEquals(3, $this->resort->numberOfBookings());
         $this->assertEquals(3, $this->resort->numberOfResidents());
@@ -376,16 +381,16 @@ final class ResortTest extends TestCase
     public function testBusyRoomControl(): void
     {
         $this->resort->checkIn(
-            $this->residentOne,
-            $this->roomOne,
             DateTimeImmutable::createFromFormat($this->dateFormat, '01-01-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-01-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-01-2007'),
+            $this->residentOne,
+            $this->roomOne
         );
         $this->resort->checkIn(
-            $this->residentTwo,
-            $this->roomTwo,
             DateTimeImmutable::createFromFormat($this->dateFormat, '01-02-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2007'),
+            $this->residentTwo,
+            $this->roomTwo
         );
         $this->assertEquals(2, $this->resort->numberOfBookings());
         $this->assertEquals(2, $this->resort->numberOfResidents());
@@ -396,22 +401,22 @@ final class ResortTest extends TestCase
         $this->assertTrue($this->resort->isBusyRoom($this->roomOne, $date));
 
         $this->resort->checkIn(
-            $this->residentThree,
-            $this->roomTwo,
             DateTimeImmutable::createFromFormat($this->dateFormat, '08-02-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2007')
-        );
-        $this->resort->checkIn(
-            $this->residentThree,
-            $this->roomTwo,
-            DateTimeImmutable::createFromFormat($this->dateFormat, '01-02-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2007')
-        );
-        $this->resort->checkIn(
-            $this->residentThree,
-            $this->roomTwo,
             DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2007')
+            $this->residentThree,
+            $this->roomTwo
+        );
+        $this->resort->checkIn(
+            DateTimeImmutable::createFromFormat($this->dateFormat, '01-02-2007'),
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2007'),
+            $this->residentThree,
+            $this->roomTwo
+        );
+        $this->resort->checkIn(
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2007'),
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2007'),
+            $this->residentThree,
+            $this->roomTwo,
         );
         $this->assertEquals(2, $this->resort->numberOfBookings());
         $this->assertEquals(2, $this->resort->numberOfResidents());
@@ -420,122 +425,122 @@ final class ResortTest extends TestCase
     public function testAvailableRoomsList(): void
     {
         $this->resort->checkIn(
-            $this->residentOne,
-            $this->roomOne,
             DateTimeImmutable::createFromFormat($this->dateFormat, '01-01-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-01-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-01-2007'),
+            $this->residentOne,
+            $this->roomOne
         );
         $this->resort->checkIn(
-            $this->residentTwo,
-            $this->roomTwo,
             DateTimeImmutable::createFromFormat($this->dateFormat, '01-02-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2007'),
+            $this->residentTwo,
+            $this->roomTwo
         );
         $this->resort->checkIn(
-            $this->residentThree,
-            $this->roomThree,
             DateTimeImmutable::createFromFormat($this->dateFormat, '01-03-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-03-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-03-2007'),
+            $this->residentThree,
+            $this->roomThree
         );
         $this->assertEquals(3, $this->resort->numberOfBookings());
         $this->assertEquals(3, $this->resort->numberOfResidents());
 
         $date = DateTimeImmutable::createFromFormat($this->dateFormat, '01-01-2007');
         $availableRooms = $this->resort->availableRoomsList($date);
-        $this->assertContains('102', $availableRooms);
-        $this->assertContains('103', $availableRooms);
+        $this->assertStringContainsString('102', $availableRooms);
+        $this->assertStringContainsString('103', $availableRooms);
 
         $date = DateTimeImmutable::createFromFormat($this->dateFormat, '01-03-2007');
         $availableRooms = $this->resort->availableRoomsList($date);
-        $this->assertContains('101', $availableRooms);
-        $this->assertContains('102', $availableRooms);
+        $this->assertStringContainsString('101', $availableRooms);
+        $this->assertStringContainsString('102', $availableRooms);
 
         $date = DateTimeImmutable::createFromFormat($this->dateFormat, '15-03-2007');
         $availableRooms = $this->resort->availableRoomsList($date);
-        $this->assertContains('101', $availableRooms);
-        $this->assertContains('102', $availableRooms);
+        $this->assertStringContainsString('101', $availableRooms);
+        $this->assertStringContainsString('102', $availableRooms);
 
         $date = DateTimeImmutable::createFromFormat($this->dateFormat, '01-05-2007');
         $availableRooms = $this->resort->availableRoomsList($date);
-        $this->assertContains('101', $availableRooms);
-        $this->assertContains('102', $availableRooms);
-        $this->assertContains('103', $availableRooms);
+        $this->assertStringContainsString('101', $availableRooms);
+        $this->assertStringContainsString('102', $availableRooms);
+        $this->assertStringContainsString('103', $availableRooms);
     }
 
     public function testResidentsInRoomsList(): void
     {
         $this->resort->checkIn(
-            $this->residentOne,
-            $this->roomOne,
             DateTimeImmutable::createFromFormat($this->dateFormat, '01-01-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-01-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-01-2007'),
+            $this->residentOne,
+            $this->roomOne
         );
         $this->resort->checkIn(
+            DateTimeImmutable::createFromFormat($this->dateFormat, '01-02-2007'),
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2007'),
             $this->residentTwo,
             $this->roomTwo,
-            DateTimeImmutable::createFromFormat($this->dateFormat, '01-02-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2007')
         );
         $this->resort->checkIn(
-            $this->residentThree,
-            $this->roomThree,
             DateTimeImmutable::createFromFormat($this->dateFormat, '01-03-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-03-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-03-2007'),
+            $this->residentThree,
+            $this->roomThree
         );
         $this->assertEquals(3, $this->resort->numberOfBookings());
         $this->assertEquals(3, $this->resort->numberOfResidents());
 
         $date = DateTimeImmutable::createFromFormat($this->dateFormat, '02-01-2007');
         $residentsInRooms = $this->resort->residentsInRoomsList($date);
-        $this->assertContains('Martinez Gomez, Adrian', $residentsInRooms);
+        $this->assertStringContainsString('Martinez Gomez, Adrian', $residentsInRooms);
 
         $date = DateTimeImmutable::createFromFormat($this->dateFormat, '01-03-2007');
         $residentsInRooms = $this->resort->residentsInRoomsList($date);
-        $this->assertContains('Roquero Sanchez, Luis', $residentsInRooms);
+        $this->assertStringContainsString('Roquero Sanchez, Luis', $residentsInRooms);
 
         $date = DateTimeImmutable::createFromFormat($this->dateFormat, '01-05-2007');
         $residentsInRooms = $this->resort->residentsInRoomsList($date);
-        $this->assertContains('', $residentsInRooms);
+        $this->assertStringContainsString('', $residentsInRooms);
 
         $this->resort->checkOut(
-            $this->residentOne,
-            DateTimeImmutable::createFromFormat($this->dateFormat, '02-01-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '02-01-2007'),
+            $this->residentOne
         );
         $this->resort->checkOut(
-            $this->residentTwo,
-            DateTimeImmutable::createFromFormat($this->dateFormat, '02-02-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '02-02-2007'),
+            $this->residentTwo
         );
         $this->resort->checkOut(
-            $this->residentThree,
-            DateTimeImmutable::createFromFormat($this->dateFormat, '02-03-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '02-03-2007'),
+            $this->residentThree
         );
         $date = DateTimeImmutable::createFromFormat($this->dateFormat, '03-05-2007');
         $residentsInRooms = $this->resort->residentsInRoomsList($date);
-        $this->assertContains('', $residentsInRooms);
+        $this->assertStringContainsString('', $residentsInRooms);
 
         $this->resort->checkIn(
+            DateTimeImmutable::createFromFormat($this->dateFormat, '10-05-2007'),
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-05-2007'),
             $this->residentOne,
-            $this->roomOne,
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-05-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-05-2007')
+            $this->roomOne
         );
         $this->resort->checkIn(
+            DateTimeImmutable::createFromFormat($this->dateFormat, '10-05-2007'),
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-05-2007'),
             $this->residentTwo,
-            $this->roomTwo,
+            $this->roomTwo
+        );
+        $this->resort->checkIn(
+            DateTimeImmutable::createFromFormat($this->dateFormat, '10-05-2007'),
             DateTimeImmutable::createFromFormat($this->dateFormat, '15-05-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-05-2007')
-        );
-        $this->resort->checkIn(
             $this->residentThree,
-            $this->roomThree,
-            DateTimeImmutable::createFromFormat($this->dateFormat, '10-05-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-05-2007')
+            $this->roomThree
         );
         $this->resort->checkIn(
-            $this->residentFour,
-            $this->roomFour,
             DateTimeImmutable::createFromFormat($this->dateFormat, '10-05-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-05-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-05-2007'),
+            $this->residentFour,
+            $this->roomFour
         );
         $date = DateTimeImmutable::createFromFormat($this->dateFormat, '12-05-2007');
         $residentsInRooms = $this->resort->residentsInRoomsList($date);
@@ -547,43 +552,43 @@ final class ResortTest extends TestCase
         ];
 
         for ($i = 0; $i < sizeof($position); $i++) {
-            $this->assertContains($position[$i], $residentsInRooms);
+            $this->assertStringContainsString($position[$i], $residentsInRooms);
         }
     }
 
     public function testAgeAverageByGender(): void
     {
         $date = DateTimeImmutable::createFromFormat($this->dateFormat, '12-03-2007');
-        $this->assertContains('0.0', $this->resort->ageAverageByGender($date));
+        $this->assertStringContainsString('0.0', $this->resort->ageAverageByGender($date));
 
         $this->resort->checkIn(
-            $this->residentOne,
-            $this->roomOne,
             DateTimeImmutable::createFromFormat($this->dateFormat, '01-01-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-01-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-01-2007'),
+            $this->residentOne,
+            $this->roomOne
         );
-        $this->assertContains('0.0', $this->resort->ageAverageByGender($date));
-        $this->assertContains('67.0', $this->resort->ageAverageByGender($date));
+        $this->assertStringContainsString('0.0', $this->resort->ageAverageByGender($date));
+        $this->assertStringContainsString('67.0', $this->resort->ageAverageByGender($date));
 
         $this->resort->checkIn(
-            $this->residentTwo,
-            $this->roomTwo,
             DateTimeImmutable::createFromFormat($this->dateFormat, '01-02-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-02-2007'),
+            $this->residentTwo,
+            $this->roomTwo
         );
         $this->resort->checkIn(
+            DateTimeImmutable::createFromFormat($this->dateFormat, '01-03-2007'),
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-03-2007'),
             $this->residentThree,
-            $this->roomThree,
-            DateTimeImmutable::createFromFormat($this->dateFormat, '01-03-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-03-2007')
+            $this->roomThree
         );
         $this->resort->checkIn(
-            $this->residentFour,
-            $this->roomFour,
             DateTimeImmutable::createFromFormat($this->dateFormat, '01-03-2007'),
-            DateTimeImmutable::createFromFormat($this->dateFormat, '15-03-2007')
+            DateTimeImmutable::createFromFormat($this->dateFormat, '15-03-2007'),
+            $this->residentFour,
+            $this->roomFour
         );
-        $this->assertContains('66.5', $this->resort->ageAverageByGender($date));
-        $this->assertContains('62.0', $this->resort->ageAverageByGender($date));
+        $this->assertStringContainsString('66.5', $this->resort->ageAverageByGender($date));
+        $this->assertStringContainsString('62.0', $this->resort->ageAverageByGender($date));
     }
 }
