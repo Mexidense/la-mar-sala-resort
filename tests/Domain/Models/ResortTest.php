@@ -73,17 +73,6 @@ final class ResortTest extends TestCase
         $this->resort = new Resort('La Mar Salá', $rooms);
     }
 
-    public function testGetters(): void
-    {
-        $this->assertEquals('Martinez Gomez, Adrian', $this->residentOne->fullname());
-        $this->assertEquals('27272727', $this->residentOne->dni()->value());
-        $this->assertEquals('M', $this->residentOne->gender()->value());
-        $this->assertEquals(
-            DateTimeImmutable::createFromFormat($this->dateFormat, '12-02-1940'),
-            $this->residentOne->birthdate()
-        );
-    }
-
     public function testAddRoom(): void
     {
         $room = new Room('501');
