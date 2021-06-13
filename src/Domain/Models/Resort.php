@@ -25,9 +25,7 @@ final class Resort
     ) {
         $this->name = $name;
         $this->rooms = array_filter($rooms, function ($room) {
-            if (false === is_null($room)) {
-                return $room;
-            }
+            return $room;
         });
         $this->bookings = [];
     }
