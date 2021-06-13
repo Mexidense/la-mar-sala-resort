@@ -63,7 +63,7 @@ final class Resort
         $residents = [];
         foreach ($this->bookings as $booking) {
             if (false === $booking->earlyCheckOut()) {
-                $residents[$booking->resident()->dni()][] = $booking->room();
+                $residents[$booking->resident()->dni()->value()][] = $booking->room();
             }
         }
 
@@ -219,7 +219,7 @@ final class Resort
 
         foreach ($this->bookings as $booking) {
             if (is_null($dateToCheck)) {
-                $residents[$booking->resident()->dni()] = $booking->resident();
+                $residents[$booking->resident()->dni()->value()] = $booking->resident();
                 continue;
             }
             if (
@@ -230,7 +230,7 @@ final class Resort
                     $dateToCheck
                 )
             ) {
-                $residents[$booking->resident()->dni()] = $booking->resident();
+                $residents[$booking->resident()->dni()->value()] = $booking->resident();
             }
         }
 
