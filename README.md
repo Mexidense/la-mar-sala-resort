@@ -2,7 +2,7 @@
 
 ## Description
 
-This exercise refers to the computer system of a holiday residence or resort. Regarding the software system, the resort has been decided to start with a new system. In the first stage, you'll focus to develop a booking management system to book rooms.
+This exercise refers to a holiday residence or resort computer system. Regarding the software system, the resort has been decided to start with a new system. In the first stage, you'll focus to develop a booking management system to book rooms.
 
 After interviews, requirement inputs and researching about the resort domain. The resort domain has the following properties:
 
