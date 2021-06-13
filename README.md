@@ -22,3 +22,44 @@ User cases will be the following:
   
 Notes:
 - The data structure will be an array. The number of array's element will be 5 by default.
+
+---
+
+# Solution
+
+First of all, as you may know, this project comes from Programming Methodologies subject of the first course in Computer engineering bachelor degree at University of Almeria.
+Originally, this exercise was mainly created by [Antonio Becerra](https://twitter.com/ualabecerra) and others, Antonio is one of awesome teachers in Computer department in this amazing university.
+That project came from Java language, and I had to make some modification on the Test part.
+
+The approach applied was TDD ([Test-Driven Development](https://martinfowler.com/bliki/TestDrivenDevelopment.html)) that it was proposed in the subject above mentioned and, I've added one more: DDD ([Domain-Driven Design](https://martinfowler.com/bliki/DomainDrivenDesign.html)) that I'm learning and then, I wanted to use this project to put into practice my knowledge. Feel free to add any comment or issue within repository.
+DDD approach needs some touches which will be applied as soon as possible.
+
+## Installation 
+
+- Clone repository:
+```batch
+  git@github.com:Mexidense/la-mar-sala-resort.git
+```
+
+- Install packages and libraries:
+```batch
+composer install
+```
+
+## Usage
+
+- Run unit tests:
+```batch
+vendor/bin/phpunit
+
+
+Result:
+PHPUnit 9.5.4 by Sebastian Bergmann and contributors.
+
+..................                                                18 / 18 (100%)
+
+Time: 00:00.012, Memory: 6.00 MB
+
+OK (18 tests, 91 assertions)
+
+```
