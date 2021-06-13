@@ -63,3 +63,15 @@ Time: 00:00.012, Memory: 6.00 MB
 OK (18 tests, 91 assertions)
 
 ```
+
+## Quality tools
+
+This project has a quality style tool called [Code Sniffer](https://github.com/squizlabs/PHP_CodeSniffer).
+
+To check and run:
+```bash
+vendor/bin/phpcs --standard=PSR12 src -v
+```
+
+As you can see, [PSR12](https://www.php-fig.org/psr/psr-12/) standard is applied.
+
