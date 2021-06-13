@@ -18,10 +18,6 @@ final class ResortTest extends TestCase
     private Room $roomThree;
     private Room $roomFour;
     private Room $roomFive;
-    private Room $roomSix;
-    private Room $roomSeven;
-    private Room $roomEight;
-    private Room $roomNine;
 
     private Resident $residentOne;
     private Resident $residentTwo;
@@ -37,10 +33,6 @@ final class ResortTest extends TestCase
         $this->roomThree = new Room('103');
         $this->roomFour = new Room('201');
         $this->roomFive = new Room('202');
-        $this->roomSix = new Room('203');
-        $this->roomSeven = new Room('301');
-        $this->roomEight = new Room('302');
-        $this->roomNine = new Room('303');
 
         $this->dateFormat = 'd-m-Y';
 
@@ -84,14 +76,14 @@ final class ResortTest extends TestCase
     public function testGetters(): void
     {
         $this->assertEquals('Martinez Gomez, Adrian', $this->residentOne->fullname());
-        $this->assertEquals('27272727', $this->residentOne->dni());
-        $this->assertEquals('M', $this->residentOne->gender());
+        $this->assertEquals('27272727', $this->residentOne->dni()->value());
+        $this->assertEquals('M', $this->residentOne->gender()->value());
         $this->assertEquals(
             DateTimeImmutable::createFromFormat($this->dateFormat, '12-02-1940'),
             $this->residentOne->birthdate()
         );
 
-        $this->assertEquals('101', $this->roomOne->number());
+        $this->assertEquals('101', $this->roomOne->roomNumber()->value());
     }
 
     public function testAddRoom(): void
@@ -233,12 +225,12 @@ final class ResortTest extends TestCase
         $this->assertTrue($rooms[0]->equals($this->roomOne));
 
         $this->assertEquals(
-            $this->resort->findRoomByNumber($this->roomOne->number())->number(),
-            $this->roomOne->number()
+            $this->resort->findRoomByNumber($this->roomOne->roomNumber()->value())->roomNumber(),
+            $this->roomOne->roomNumber()
         );
         $rooms[0] = new Room('808');
         $this->assertTrue(
-            ($this->resort->findRoomByNumber($this->roomOne->number()))->equals($this->roomOne)
+            ($this->resort->findRoomByNumber($this->roomOne->roomNumber()->value()))->equals($this->roomOne)
         );
     }
 

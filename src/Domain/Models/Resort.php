@@ -25,9 +25,7 @@ final class Resort
     ) {
         $this->name = $name;
         $this->rooms = array_filter($rooms, function ($room) {
-            if (false === is_null($room)) {
-                return $room;
-            }
+            return $room;
         });
         $this->bookings = [];
     }
@@ -63,7 +61,7 @@ final class Resort
         $residents = [];
         foreach ($this->bookings as $booking) {
             if (false === $booking->earlyCheckOut()) {
-                $residents[$booking->resident()->dni()][] = $booking->room();
+                $residents[$booking->resident()->dni()->value()][] = $booking->room();
             }
         }
 
@@ -82,13 +80,13 @@ final class Resort
 
     public function addRoom(Room $room): void
     {
-        $this->rooms[$room->number()] = $room;
+        $this->rooms[$room->roomNumber()->value()] = $room;
     }
 
     public function findRoomByNumber(string $roomNumber): ?Room
     {
         foreach ($this->rooms as $room) {
-            if ($roomNumber === $room->number()) {
+            if ($roomNumber === $room->roomNumber()->value()) {
                 return $room;
             }
         }
@@ -152,8 +150,7 @@ final class Resort
     ): void {
         foreach ($this->bookings as $bookingIndex => $booking) {
             if ($residentOut->equals($booking->resident())) {
-                $changedBooking = $booking->changeCheckOutDate($newCheckOutDate);
-                $this->bookings[$bookingIndex] = $changedBooking;
+                $this->bookings[$bookingIndex] = $booking->changeCheckOutDate($newCheckOutDate);
                 break;
             }
         }
@@ -219,7 +216,7 @@ final class Resort
 
         foreach ($this->bookings as $booking) {
             if (is_null($dateToCheck)) {
-                $residents[$booking->resident()->dni()] = $booking->resident();
+                $residents[$booking->resident()->dni()->value()] = $booking->resident();
                 continue;
             }
             if (
@@ -230,7 +227,7 @@ final class Resort
                     $dateToCheck
                 )
             ) {
-                $residents[$booking->resident()->dni()] = $booking->resident();
+                $residents[$booking->resident()->dni()->value()] = $booking->resident();
             }
         }
 
@@ -248,7 +245,7 @@ final class Resort
         $residentsStatistics = [];
 
         foreach ($residents as $resident) {
-            $residentsStatistics[$resident->gender()][] = $resident->age($dateToCheck);
+            $residentsStatistics[$resident->gender()->value()][] = $resident->age($dateToCheck);
         }
 
         if (false === array_key_exists('F', $residentsStatistics)) {
