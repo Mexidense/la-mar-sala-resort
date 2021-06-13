@@ -18,10 +18,6 @@ final class ResortTest extends TestCase
     private Room $roomThree;
     private Room $roomFour;
     private Room $roomFive;
-    private Room $roomSix;
-    private Room $roomSeven;
-    private Room $roomEight;
-    private Room $roomNine;
 
     private Resident $residentOne;
     private Resident $residentTwo;
@@ -37,10 +33,6 @@ final class ResortTest extends TestCase
         $this->roomThree = new Room('103');
         $this->roomFour = new Room('201');
         $this->roomFive = new Room('202');
-        $this->roomSix = new Room('203');
-        $this->roomSeven = new Room('301');
-        $this->roomEight = new Room('302');
-        $this->roomNine = new Room('303');
 
         $this->dateFormat = 'd-m-Y';
 
