@@ -1,4 +1,4 @@
-name: Continuos integration
+name: PHP Unit tests
 
 on: [push]
 
@@ -8,4 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: php-actions/composer@v6
+        with:
+          php_version: 7.4
+          version: latest
       - uses: php-actions/phpunit@v3
