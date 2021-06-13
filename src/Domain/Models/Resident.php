@@ -2,11 +2,11 @@
 
 declare(strict_types = 1);
 
-namespace Domain;
+namespace Domain\Models;
 
 use DateTimeImmutable;
 
-final class Resident
+final class Resident implements Stringable
 {
     private string $fullName;
     private string $dni;
