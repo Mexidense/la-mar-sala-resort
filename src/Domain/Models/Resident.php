@@ -6,12 +6,13 @@ namespace Domain\Models;
 
 use DateTimeImmutable;
 use Domain\ValueObjects\Dni;
+use Domain\ValueObjects\Gender;
 
 final class Resident implements Stringable
 {
     private string $fullName;
     private Dni $dni;
-    private string $gender;
+    private Gender $gender;
     private DateTimeImmutable $birthdate;
 
     public function __construct(
@@ -22,7 +23,7 @@ final class Resident implements Stringable
     ) {
         $this->fullName = $fullName;
         $this->dni = Dni::create($dni);
-        $this->gender = $gender;
+        $this->gender = Gender::create($gender);
         $this->birthdate = $birthdate;
     }
 
@@ -36,7 +37,7 @@ final class Resident implements Stringable
         return $this->dni;
     }
 
-    public function gender(): string
+    public function gender(): Gender
     {
         return $this->gender;
     }
@@ -62,7 +63,7 @@ final class Resident implements Stringable
             'Full name: %s, DNI: %s, Gender: %s, Birthdate: %s',
             $this->fullName,
             $this->dni->value(),
-            $this->gender,
+            $this->gender->value(),
             $this->birthdate->format('d-m-Y')
         );
     }

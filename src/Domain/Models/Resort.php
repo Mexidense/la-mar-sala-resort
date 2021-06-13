@@ -248,7 +248,7 @@ final class Resort
         $residentsStatistics = [];
 
         foreach ($residents as $resident) {
-            $residentsStatistics[$resident->gender()][] = $resident->age($dateToCheck);
+            $residentsStatistics[$resident->gender()->value()][] = $resident->age($dateToCheck);
         }
 
         if (false === array_key_exists('F', $residentsStatistics)) {

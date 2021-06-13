@@ -77,7 +77,7 @@ final class ResortTest extends TestCase
     {
         $this->assertEquals('Martinez Gomez, Adrian', $this->residentOne->fullname());
         $this->assertEquals('27272727', $this->residentOne->dni()->value());
-        $this->assertEquals('M', $this->residentOne->gender());
+        $this->assertEquals('M', $this->residentOne->gender()->value());
         $this->assertEquals(
             DateTimeImmutable::createFromFormat($this->dateFormat, '12-02-1940'),
             $this->residentOne->birthdate()
