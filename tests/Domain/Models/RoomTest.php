@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Domain\Models;
 
 use Domain\Models\Room;
+use Domain\ValueObjects\InvalidRoomNumber;
 use PHPUnit\Framework\TestCase;
 
 final class RoomTest extends TestCase
@@ -26,5 +27,11 @@ final class RoomTest extends TestCase
 
         $roomThree = new Room('101');
         $this->assertTrue($roomOne->equals($roomThree));
+    }
+
+    public function testInvalidRoomNumberException(): void
+    {
+        $this->expectException(InvalidRoomNumber::class);
+        new Room('');
     }
 }
