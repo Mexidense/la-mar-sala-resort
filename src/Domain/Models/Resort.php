@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Domain\Models;
 
@@ -147,7 +147,8 @@ final class Resort
     }
 
     public function checkOut(
-        DateTimeImmutable $newCheckOutDate, Resident $residentOut
+        DateTimeImmutable $newCheckOutDate,
+        Resident $residentOut
     ): void {
         foreach ($this->bookings as $bookingIndex => $booking) {
             if ($residentOut->equals($booking->resident())) {
@@ -182,7 +183,6 @@ final class Resort
                 );
             }
         }
-
     }
 
     public function isBusyRoom(Room $room, DateTimeImmutable $date): bool
@@ -205,8 +205,8 @@ final class Resort
         $availableRooms = [];
         foreach ($this->rooms as $room) {
             if (false === $this->isBusyRoom($room, $date)) {
-               $availableRooms[] = $room;
-           }
+                $availableRooms[] = $room;
+            }
         }
 
         return ArrayToString::format($availableRooms);
