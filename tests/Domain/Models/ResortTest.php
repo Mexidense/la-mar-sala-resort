@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Domain\Models;
 
 use DateTimeImmutable;
 use Domain\Models\Resident;
@@ -71,19 +71,6 @@ final class ResortTest extends TestCase
         ];
 
         $this->resort = new Resort('La Mar Salá', $rooms);
-    }
-
-    public function testGetters(): void
-    {
-        $this->assertEquals('Martinez Gomez, Adrian', $this->residentOne->fullname());
-        $this->assertEquals('27272727', $this->residentOne->dni()->value());
-        $this->assertEquals('M', $this->residentOne->gender()->value());
-        $this->assertEquals(
-            DateTimeImmutable::createFromFormat($this->dateFormat, '12-02-1940'),
-            $this->residentOne->birthdate()
-        );
-
-        $this->assertEquals('101', $this->roomOne->roomNumber()->value());
     }
 
     public function testAddRoom(): void
