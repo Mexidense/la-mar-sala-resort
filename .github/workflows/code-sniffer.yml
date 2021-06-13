@@ -1,0 +1,14 @@
+name: Code Sniffer
+
+on: [push]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: php-actions/composer@v6
+        with:
+          php_version: 7.4
+          version: latest
+      - run: ./vendor/bin/phpcs --standard=PSR12 --colors src
