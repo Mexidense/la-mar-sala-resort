@@ -1,15 +1,11 @@
 name: Continuos integration
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   build-test:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - uses: php-actions/composer@v5
-      - name: PHPUnit tests
-        uses: php-actions/phpunit@v3
-        with:
-          bootstrap: vendor/autoload.php
-          configuration: test/phpunit.xml
+      - uses: php-actions/composer@v6
+      - uses: php-actions/phpunit@v3
