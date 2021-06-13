@@ -83,7 +83,7 @@ final class ResortTest extends TestCase
             $this->residentOne->birthdate()
         );
 
-        $this->assertEquals('101', $this->roomOne->number());
+        $this->assertEquals('101', $this->roomOne->roomNumber()->value());
     }
 
     public function testAddRoom(): void
@@ -225,12 +225,12 @@ final class ResortTest extends TestCase
         $this->assertTrue($rooms[0]->equals($this->roomOne));
 
         $this->assertEquals(
-            $this->resort->findRoomByNumber($this->roomOne->number())->number(),
-            $this->roomOne->number()
+            $this->resort->findRoomByNumber($this->roomOne->roomNumber()->value())->roomNumber(),
+            $this->roomOne->roomNumber()
         );
         $rooms[0] = new Room('808');
         $this->assertTrue(
-            ($this->resort->findRoomByNumber($this->roomOne->number()))->equals($this->roomOne)
+            ($this->resort->findRoomByNumber($this->roomOne->roomNumber()->value()))->equals($this->roomOne)
         );
     }
 

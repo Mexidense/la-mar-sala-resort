@@ -82,13 +82,13 @@ final class Resort
 
     public function addRoom(Room $room): void
     {
-        $this->rooms[$room->number()] = $room;
+        $this->rooms[$room->roomNumber()->value()] = $room;
     }
 
     public function findRoomByNumber(string $roomNumber): ?Room
     {
         foreach ($this->rooms as $room) {
-            if ($roomNumber === $room->number()) {
+            if ($roomNumber === $room->roomNumber()->value()) {
                 return $room;
             }
         }

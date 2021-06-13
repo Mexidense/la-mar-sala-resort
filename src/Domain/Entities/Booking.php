@@ -80,7 +80,7 @@ final class Booking
         return sprintf(
             'Number: %, Room: %s, Check-in date: %s, Check-out date: %s, Resident: %s',
             $this->number,
-            $this->room->number(),
+            $this->room->roomNumber(),
             $this->checkIn->format('d-m-Y'),
             $this->checkOut->format('d-m-Y'),
             $this->resident->fullName()
