@@ -22,7 +22,7 @@ final class Room implements Stringable
 
     public function equals(Room $roomToCompare): bool
     {
-        return $this->number === $roomToCompare->roomNumber();
+        return $this->number->value() === $roomToCompare->roomNumber()->value();
     }
 
     public function __toString(): string

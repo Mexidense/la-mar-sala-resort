@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Domain\Models;
 
 use DateTimeImmutable;
 use Domain\Models\Resident;
@@ -82,8 +82,6 @@ final class ResortTest extends TestCase
             DateTimeImmutable::createFromFormat($this->dateFormat, '12-02-1940'),
             $this->residentOne->birthdate()
         );
-
-        $this->assertEquals('101', $this->roomOne->roomNumber()->value());
     }
 
     public function testAddRoom(): void
