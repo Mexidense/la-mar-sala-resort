@@ -38,7 +38,7 @@ DDD approach needs some touches which will be applied as soon as possible.
 
 - Clone repository:
 ```batch
-  git@github.com:Mexidense/la-mar-sala-resort.git
+git clone git@github.com:Mexidense/la-mar-sala-resort.git resort && cd resort
 ```
 
 - Install packages and libraries:
