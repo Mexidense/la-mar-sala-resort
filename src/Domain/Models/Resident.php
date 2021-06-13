@@ -44,4 +44,25 @@ final class Resident implements Stringable
     {
         return $this->birthdate;
     }
+
+    public function age(DateTimeImmutable $date): float
+    {
+        return $this->birthdate->diff($date)->y;
+    }
+
+    public function equals(Resident $resident): bool
+    {
+        return $this->dni === $resident->dni();
+    }
+
+    public function __toString(): string
+    {
+        return sprintf(
+            'Full name: %s, DNI: %s, Gender: %s, Birthdate: %s',
+            $this->fullName,
+            $this->dni,
+            $this->gender,
+            $this->birthdate->format('d-m-Y')
+        );
+    }
 }
